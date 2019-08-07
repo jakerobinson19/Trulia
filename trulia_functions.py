@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 
 xpath {
+  'listing_cards':'//div[@data-testid="home-card-rent"]',
   'address':'tyuio',
   'price':'ghjkl',
   'bdr':'asf',
