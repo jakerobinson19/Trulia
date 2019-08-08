@@ -13,7 +13,7 @@ Basic tool for scraping current home listings from Trulia, written in Python usi
 
 Software Requirements/Info
 --------------------------
-- This code was written using [Python 3.5](https://www.python.org/downloads/).
+- This code was written using [Python 3.7](https://www.python.org/downloads/).
 - [Selenium](http://www.seleniumhq.org/download/) (this can be PIP installed, written using v3.0.2).
 - The Selenium package requires a webdriver program. This code was written 
 using [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) v2.25.
