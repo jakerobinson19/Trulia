@@ -26,9 +26,9 @@ df.head(n = 5)
 ```
 
 ```
-                 address     bedrooms  bedrooms   sqft   rent 
-0      3011 Bissonnet St          1         1      991   1795    
-1          4229 Drake St          3         2     1980   2200     
-2        2237 Wroxton Rd          2         2     1500   2500    
-3      4318 Childress St          3         2     1964   2500     
-4       2708 Werlein Ave          3         2     1496   1995     
+                 address     bedrooms  bedrooms    sqft    rent 
+0      3011 Bissonnet St          1         1       991   $1795    
+1          4229 Drake St          3         2     1,980   $2200     
+2        2237 Wroxton Rd          2         2     1,500   $2500    
+3      4318 Childress St          3         2     1,964   $2500     
+4       2708 Werlein Ave          3         2     1,496   $1995     
