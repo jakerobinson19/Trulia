@@ -1,6 +1,10 @@
 # trulia_data_scraper
 Scrape data from trulia.com using selenium and python
 
+ATTENTION
+---------
+Trulia can detect the automated webdriver and will throw a captcha.
+
 
 WARNING: Use this code at your own risk, scraping is against Trulia's TOC
 -------------------------------------------------------------------------
@@ -18,11 +22,11 @@ Example of the output dataframe
 -------------------------------
 
 ```py
-df.head(n = 6)
+df.head(n = 5)
 ```
 
 ```
-                 address     bedrooms  bedrooms   sqft   rent  \
+                 address     bedrooms  bedrooms   sqft   rent 
 0      3011 Bissonnet St          1         1      991   1795    
 1          4229 Drake St          3         2     1980   2200     
 2        2237 Wroxton Rd          2         2     1500   2500    
