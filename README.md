@@ -26,7 +26,7 @@ df.head(n = 5)
 ```
 
 ```
-                 address     bedrooms  bedrooms    sqft    rent 
+                 address     bedrooms  bathrooms    sqft    rent 
 0      3011 Bissonnet St          1         1       991   $1795    
 1          4229 Drake St          3         2     1,980   $2200     
 2        2237 Wroxton Rd          2         2     1,500   $2500    
