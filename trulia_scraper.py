@@ -28,17 +28,21 @@ if __name__=='__main__':
       listings = get_listings(browser)
 
       '''Trulia listings cards return text in two possible formats:
-            'PET FRIENDLY\n
-             $1,281 – $1,830+\n
-             1 – 3bd1 – 2ba867 – 1,608 sqft+\n
-             La Privada at Scottsdale Ranch apartments\n
+            'PET FRIENDLY
+             $1,281 – $1,830
+             1 – 3bd
+             1 – 2ba
+             867 – 1,608 sqft
+             La Privada at Scottsdale Ranch apartments
              Contact Property'
           
              or 
                 
-            '$2,200\n
-             3bd2ba2,195 sqft\n
-             8006 N Via Verde\n
+            '$2,200
+             3bd
+             2ba
+             2,195 sqft
+             8006 N Via Verde
              Contact Property'
                 
            Spliting on the newlines will create a list of text. Based on the
