@@ -54,6 +54,20 @@ if __name__=='__main__':
           #pull text from the listing and split on the newlines
           l = l.text
           l = l.split('\n')
+          '''
+          address = l[-3]
+
+          for item in l:
+            if '$' in item:
+              price = item
+            elif 'bd' in item:
+              bds = item
+            elif 'ba' in item:
+              bas = item
+            elif 'sqft' in item:
+              sqft = item
+           '''
+          
           
           address = l[-2]
           
