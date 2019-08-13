@@ -49,19 +49,20 @@ if __name__=='__main__':
            formatting above, the list will map onto the structure of 
            [..., (price), (bd,ba,sqft), (address), 'Contact Property'] 
               
-           This means address will alway be second to last, rooms and sq footage 
-           are third to last, and price comes just before that. In other words, 
-           address = list[-2], rooms = list[-3], and price = list[-4]'''
+           Then looping through the listings text, checking if it contains
+           basic keywords and then append the desired info in a list which is
+           then converted into a dataframe and written to a csv file'''
               
-      for l in listings:
+      for card in listings:
         try:     
           #pull text from the listing and split on the newlines
-          l = l.text
-          l = l.split('\n')
+          card = card.text
+          card = card.split('\n')
           
-          address = l[-3]
+          address = card[-3]
+          card.pop(-3)
 
-          for item in l:
+          for item in card:
             if '$' in item:
               price = item.rstrip('/mo')
             elif 'bd' in item:
