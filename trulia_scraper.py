@@ -54,21 +54,19 @@ if __name__=='__main__':
           #pull text from the listing and split on the newlines
           l = l.text
           l = l.split('\n')
-          '''
+          
           address = l[-3]
 
           for item in l:
             if '$' in item:
-              price = item
+              price = item.rstrip('/mo')
             elif 'bd' in item:
-              bds = item
+              bds = item.rstrip('bd')
             elif 'ba' in item:
-              bas = item
+              bas = item.rstrip('ba')
             elif 'sqft' in item:
-              sqft = item
+              sqft = item.rstrip(' sqft')
            '''
-          
-          
           address = l[-2]
           
           price = l[-4]
@@ -83,7 +81,7 @@ if __name__=='__main__':
           
           details = details[0].split(' ')
           sqft = details.pop(0)
-
+          '''
           output_data.append([address,bds,bas,sqft,price])
         
         except Exception as e:
