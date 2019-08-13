@@ -70,22 +70,7 @@ if __name__=='__main__':
               bas = item.rstrip('ba')
             elif 'sqft' in item:
               sqft = item.rstrip(' sqft')
-           '''
-          address = l[-2]
-          
-          price = l[-4]
-          
-          details = l[-3]
-          
-          detailss = details.split('bd')
-          bds = details.pop(0)
-          
-          details = details[0].split('ba')
-          bas = details.pop(0)
-          
-          details = details[0].split(' ')
-          sqft = details.pop(0)
-          '''
+       
           output_data.append([address,bds,bas,sqft,price])
         
         except Exception as e:
