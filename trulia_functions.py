@@ -83,14 +83,36 @@ def go_to_next_page(browser):
     except:
       print("Unable to get next page - abort")
 
+def get_summary_data(data):
+  #set studios to bedrooms = 0
+  data.loc[data['Bedrooms'] == 'Studio', 'Bedrooms'] = 0
+  
+  #formatting data to allow aggregation
+  data['Bedrooms'] = data.Bedrooms.astype(int)
+  data['Bathrooms'] = data.Bathrooms.astype(float)
+  data['Sqft'] = data.Sqft.str.replace(',','').astype(int)
+  data['Price'] = data.Price.str.replace('$','')
+  data['Price'] = data.Price.str.replace(',','').astype(int)
+  
+
+  sum_data = data.groupby(['Bedrooms','Bathrooms']).agg({'Sqft':['min','max'], 'Price':['min','max','mean']})
+
+  return(sum_data)      
+      
 def create_output_dataframe(output_data):
   columns = ["Address", "Bedrooms", "Bathrooms", "Sqft", "Price"]
   output_dataframe = pd.DataFrame(output_data, columns = columns).drop_duplicates()
 
   return(output_dataframe)
 
-def write_data_to_file(output_data, zipcode):
-    file_name = 'Rents_'+ zipcode + '.csv'
-    columns = ["Address", "Bedrooms", "Bathrooms", "Sqft", "Price"]
-    pd.DataFrame(output_data, columns = columns).drop_duplicates().to_csv(
-    file_name, index = False, encoding = "UTF-8")
+def write_data_to_file(list_dfs, zipcode):
+    file_name = 'Rents_'+ zipcode + '.xlsx'
+    xls_path = '/Users/admin/Desktop/trulia_scraper/' + file_name
+
+    with ExcelWriter(xls_path) as writer:
+        for n, df in enumerate(list_dfs):
+            if n == 0:
+              df.to_excel(writer, 'Rents - ' + zipcode)
+            if n == 1:
+              df.to_excel(writer, 'Summary - ' + zipcode)
+        writer.save()
