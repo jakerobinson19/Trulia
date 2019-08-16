@@ -13,12 +13,7 @@ from pandas import ExcelWriter
 import numpy as np
 
 xpath {
-  'listing_cards':'//*[@class="xsCol12Landscape smlCol12 lrgCol8"]',
-  'address':'tyuio',
-  'price':'ghjkl',
-  'bdr':'asf',
-  'ba':'asf',
-  'sqft':'asfd'
+  'listing_cards':'//*[@class="xsCol12Landscape smlCol12 lrgCol8"]'
 }
 
 
@@ -104,6 +99,18 @@ def create_output_dataframe(output_data):
   output_dataframe = pd.DataFrame(output_data, columns = columns).drop_duplicates()
 
   return(output_dataframe)
+
+def check_for_captcha(browser):
+  try:
+    h1 = browser.find_element_by_xpath('/html/body/section/div[2]/div/h1').text
+    if 'verify' in h1:
+      print("A wild Captcha has appeared!! Please solve it for me so I can continue :)")
+      return(True)
+    else:
+      return(False)
+
+  except:
+      return(False)
 
 def write_data_to_file(list_dfs, zipcode):
     file_name = 'Rents_'+ zipcode + '.xlsx'
