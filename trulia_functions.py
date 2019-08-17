@@ -19,6 +19,20 @@ xpath {
 
 def go_to_trulia(browser):
   browser.get('https://www.trulia.com/')
+
+def get_current_url(browser):
+    """ Get URL of the loaded webpage """
+    try:
+        current_url = browser.execute_script("return window.location.href")
+
+    except WebDriverException:
+        try:
+            current_url = browser.current_url
+
+        except WebDriverException:
+            current_url = None
+
+    return current_url
   
 def get_listings(browser):
   try:
@@ -110,8 +124,15 @@ def check_for_captcha(browser):
       return(False)
 
   except:
-      return(False)
-
+      try:
+        url = get_current_url(browser)
+        if 'captcha' in url:
+          print("A wild Captcha has appeared!! Please solve it for me so I can continue :)")
+          return(True)
+        else:
+          return(False)
+      except:
+        return(False)
 def write_data_to_file(list_dfs, zipcode):
     file_name = 'Rents_'+ zipcode + '.xlsx'
     xls_path = '/Users/admin/Desktop/trulia_scraper/' + file_name
