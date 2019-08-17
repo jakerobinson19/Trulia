@@ -120,6 +120,7 @@ def check_for_captcha(browser):
     if 'verify' in h1:
       print("A wild Captcha has appeared!! Please solve it for me so I can continue :)")
       return(True)
+    
     else:
       return(False)
 
@@ -129,10 +130,15 @@ def check_for_captcha(browser):
         if 'captcha' in url:
           print("A wild Captcha has appeared!! Please solve it for me so I can continue :)")
           return(True)
+       
         else:
           return(False)
+        
       except:
         return(False)
+      
+#def recursive captcha check
+
 def write_data_to_file(list_dfs, zipcode):
     file_name = 'Rents_'+ zipcode + '.xlsx'
     xls_path = '/Users/admin/Desktop/trulia_scraper/' + file_name
