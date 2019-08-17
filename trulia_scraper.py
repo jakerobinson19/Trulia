@@ -5,80 +5,117 @@ from trulia_functions import write_data_to_file
 import time
 
 if __name__=='__main__':
-  output_data = []
+
+  zips = ['28215','28227','28213','28212','28210','28208','28205','28105','28269']
 
   browser = webdriver.Chrome()
 
   go_to_trulia(browser)
-  
-  zipcode = input("What zipcode would you like to get rent data for? ")
-  
-  browser.get('https://www.trulia.com/for_rent/{}_zip/'.format(zipcode))
 
-  inp = input("---------------\nDo you wish to continue with scraping? ")
+  zipcode = input("Enter the zipcode you would like to scrape data for: ")
 
+  #inp = input("Do you wish to continue with scraping? ")
 
-  #get number of pages of rentals for the zipcode
   pages = get_number_of_pages(browser)
+  print("{} pages".format(pages))
+  loop = 1
 
-  if inp == 'y':
+  for zipcode in zips:
+    output_data = []
+    captcha = check_for_captcha(browser)
 
-    while loop < pages:
+    if captcha:
+      while True:
+        resume = input("Enter 'y' once you have completed the captcha: ")
+        if resume == 'y':
+          #captcha = check_for_captcha(browser)
+          #if captcha:
+          break
+
+    browser.get('https://www.trulia.com/for_rent/'+ zipcode +'_zip/')
+
+    captcha = check_for_captcha(browser)
+
+    if captcha:
+      while True:
+        resume = input("Enter 'y' once you have completed the captcha: ")
+        if resume == 'y':
+          #captcha = check_for_captcha(browser)
+          #if captcha:
+          break
+
+    pages = get_number_of_pages(browser)
+    print("{} pages".format(pages))
+    loop = 1
+
+    while loop <= pages:
       time.sleep(5)
       listings = get_listings(browser)
 
-      '''Trulia listings cards return text in two possible formats:
-            'PET FRIENDLY
-             $1,281 – $1,830
-             1 – 3bd
-             1 – 2ba
-             867 – 1,608 sqft
-             La Privada at Scottsdale Ranch apartments
-             Contact Property'
-          
-             or 
-                
-            '$2,200
-             3bd
-             2ba
-             2,195 sqft
-             8006 N Via Verde
-             Contact Property'
-                
-           Spliting on the newlines will create a list of text. Based on the
-           formatting above, the list will map onto the structure of 
-           [..., (price), (bd,ba,sqft), (address), 'Contact Property'] 
-              
-           Then looping through the listings text, checking if it contains
-           basic keywords and then append the desired info in a list which is
-           then converted into a dataframe and written to a csv file'''
-              
-      for card in listings:
-        try:     
-          #pull text from the listing and split on the newlines
-          card = card.text
-          card = card.split('\n')
-          
-          address = card[-3]
-          card.pop(-3)
+      print("{} Listings from this page".format(len(listings)))
 
-          for item in card:
+      for l in listings:
+        try:
+          l = l.text
+
+          l = l.split('\n')
+          
+          address = l[-3]
+          l.pop(-3)
+
+          abort = False
+
+          for item in l:
             if '$' in item:
               price = item.rstrip('/mo')
-            elif 'bd' in item:
-              bds = item.rstrip('bd')
+            elif 'bd' in item or 'Studio' in item:
+              if '-' in item:
+                abort = True
+                break
+              elif 'Studio' in item:
+                bds = 0
+              else:
+                bds = item.rstrip('bd')
             elif 'ba' in item:
               bas = item.rstrip('ba')
             elif 'sqft' in item:
               sqft = item.rstrip(' sqft')
-       
-          output_data.append([address,bds,bas,sqft,price])
-        
+            
+          if address == 0 or bds == 10 or bas == 0 or sqft == 0 or price == 0:
+            abort = True
+
+          if abort == True:
+            continue
+          else:
+            output_data.append([address,bds,bas,sqft,price])
+            address = 0
+            bds = 10
+            bas = 0
+            sqft = 0
+            price = 0
+
         except Exception as e:
-          print("something went wrong: {}".format(e))
+          print("Something went wrong: {}".format(e))
           continue
 
       loop += 1
       go_to_next_page(browser)
 
-    write_data_to_file(output_data, '85258')
+      captcha = check_for_captcha(browser)
+
+      if captcha:
+        while True:
+          resume = input("Enter 'y' once you have completed the captcha: ")
+          if resume == 'y':
+            #captcha = check_for_captcha(browser)
+            #if captcha:
+            break
+
+
+    #print(output_data)
+
+    output_dataframe = create_output_dataframe(output_data)
+
+    sum_data = get_summary_data(output_dataframe)
+
+    write_data_to_file([output_dataframe, sum_data], zipcode)
