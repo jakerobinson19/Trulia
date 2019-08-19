@@ -3,7 +3,7 @@ Scrape data from trulia.com using selenium and python
 
 ATTENTION
 ---------
-Trulia can detect the automated webdriver and will throw a captcha.
+Trulia can detect the automated webdriver and will throw a captcha. However, the bot will pause anytime a captcha appears and wait for the user to solve the captcha to continue scraping data. Although not entirely automated because of this required interaction, the bot can still reasonably scrape listing data for several zipcodes in between interruption.
 
 
 WARNING: Use this code at your own risk, scraping is against Trulia's TOC
