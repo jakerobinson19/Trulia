@@ -1,11 +1,6 @@
 # trulia_data_scraper
 Scrape data from trulia.com using selenium and python
 
-ATTENTION
----------
-Trulia can detect the automated webdriver and will throw a captcha. However, the bot will pause anytime a captcha appears and wait for the user to solve the captcha to continue scraping data. Although not entirely automated because of this required interaction, the bot can still reasonably scrape listing data for several zipcodes in between interruption.
-
-
 WARNING: Use this code at your own risk, scraping is against Trulia's TOC
 -------------------------------------------------------------------------
 
@@ -14,7 +9,6 @@ Basic tool for scraping current home listings from Trulia, written in Python usi
 Some things to keep in mind:
 ----------------------------
 * You will need to edit the input parameter of function init_driver within zillow_runfile.py to point to the local path of your web driver program (required by Selenium).
-* The max return for each search term (i.e. each zip code) is 520 home listings.
 * Zillow will periodically throw up a CAPTCHA page. The script is designed to pause scraping indefinitely until the user has manually completed the CAPTCHA requirements (at which point it should resume scraping).
 
 Software Requirements/Info
@@ -38,7 +32,6 @@ df.head(n = 5)
 2        2237 Wroxton Rd          2         2     1,500   $2500    
 3      4318 Childress St          3         2     1,964   $2500     
 4       2708 Werlein Ave          3         2     1,496   $1995 
+```
 
 
-Example of summary data
---------------------------------
