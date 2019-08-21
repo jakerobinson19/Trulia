@@ -14,8 +14,8 @@ Basic tool for scraping current home listings from Trulia, written in Python usi
 Some things to keep in mind:
 ----------------------------
 * You will need to edit the input parameter of function init_driver within zillow_runfile.py to point to the local path of your web driver program (required by Selenium).
-*The max return for each search term (i.e. each zip code) is 520 home listings.
-*Zillow will periodically throw up a CAPTCHA page. The script is designed to pause scraping indefinitely until the user has manually completed the CAPTCHA requirements (at which point it should resume scraping).
+* The max return for each search term (i.e. each zip code) is 520 home listings.
+* Zillow will periodically throw up a CAPTCHA page. The script is designed to pause scraping indefinitely until the user has manually completed the CAPTCHA requirements (at which point it should resume scraping).
 
 Software Requirements/Info
 --------------------------
