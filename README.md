@@ -9,7 +9,13 @@ Trulia can detect the automated webdriver and will throw a captcha. However, the
 WARNING: Use this code at your own risk, scraping is against Trulia's TOC
 -------------------------------------------------------------------------
 
-Basic tool for scraping current home listings from Trulia, written in Python using Selenium. The code takes as input search terms that would normally be entered on the Trulia home page. It creates 5 variables on each home listing from the data, saves them to a dataframe, and then writes the df to a CSV file that gets saved to your working directory.
+Basic tool for scraping current home listings from Trulia, written in Python using Selenium. The code takes as input a list of zipcodes and whether to browse listing to buy, rent, or those that have been recently sold on Trulia. It creates 5 variables on each home listing, saves them to a dataframe, and then writes the df to a excel file, with a separate sheet for each zipcode, that gets saved to your working directory. There is also 
+
+Some things to keep in mind:
+----------------------------
+* You will need to edit the input parameter of function init_driver within zillow_runfile.py to point to the local path of your web driver program (required by Selenium).
+*The max return for each search term (i.e. each zip code) is 520 home listings.
+*Zillow will periodically throw up a CAPTCHA page. The script is designed to pause scraping indefinitely until the user has manually completed the CAPTCHA requirements (at which point it should resume scraping).
 
 Software Requirements/Info
 --------------------------
@@ -31,4 +37,8 @@ df.head(n = 5)
 1          4229 Drake St          3         2     1,980   $2200     
 2        2237 Wroxton Rd          2         2     1,500   $2500    
 3      4318 Childress St          3         2     1,964   $2500     
-4       2708 Werlein Ave          3         2     1,496   $1995     
+4       2708 Werlein Ave          3         2     1,496   $1995 
+
+
+Example of summary data
+--------------------------------
