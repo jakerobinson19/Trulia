@@ -18,7 +18,7 @@ Software Requirements/Info
 - This code was written using [Python 3.7](https://www.python.org/downloads/).
 - [Selenium](http://www.seleniumhq.org/download/) (this can be PIP installed, written using v3.0.2).
 - The Selenium package requires a webdriver program. This code was written 
-using [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) v2.25.
+using [Chromedriver](https://chromedriver.storage.googleapis.com/index.html?path=76.0.3809.126/) v76.0.3809.
 
 Example of the output dataframe
 -------------------------------
