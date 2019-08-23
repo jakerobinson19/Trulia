@@ -1,4 +1,4 @@
-from trulia_functions import get_listings
+import trulia_functions as tl
 from trulia_functions import go_to_next_page
 from trulia_functions import write_data_to_file
 
@@ -10,19 +10,19 @@ if __name__=='__main__':
 
   browser = webdriver.Chrome()
 
-  go_to_trulia(browser)
+  tl.go_to_trulia(browser)
 
   zipcode = input("Enter the zipcode you would like to scrape data for: ")
 
   #inp = input("Do you wish to continue with scraping? ")
 
-  pages = get_number_of_pages(browser)
+  pages = tl.get_number_of_pages(browser)
   print("{} pages".format(pages))
   loop = 1
 
   for zipcode in zips:
     output_data = []
-    captcha = check_for_captcha(browser)
+    captcha = tl.check_for_captcha(browser)
 
     if captcha:
       while True:
@@ -34,7 +34,7 @@ if __name__=='__main__':
 
     browser.get('https://www.trulia.com/for_rent/'+ zipcode +'_zip/')
 
-    captcha = check_for_captcha(browser)
+    captcha = tl.check_for_captcha(browser)
 
     if captcha:
       while True:
@@ -44,13 +44,13 @@ if __name__=='__main__':
           #if captcha:
           break
 
-    pages = get_number_of_pages(browser)
+    pages = tl.get_number_of_pages(browser)
     print("{} pages".format(pages))
     loop = 1
 
     while loop <= pages:
       time.sleep(5)
-      listings = get_listings(browser)
+      listings = tl.get_listings(browser)
 
       print("{} Listings from this page".format(len(listings)))
 
@@ -99,9 +99,9 @@ if __name__=='__main__':
           continue
 
       loop += 1
-      go_to_next_page(browser)
+      tl.go_to_next_page(browser)
 
-      captcha = check_for_captcha(browser)
+      captcha = tl.check_for_captcha(browser)
 
       if captcha:
         while True:
@@ -114,8 +114,8 @@ if __name__=='__main__':
 
     #print(output_data)
 
-    output_dataframe = create_output_dataframe(output_data)
+    output_dataframe = tl.create_output_dataframe(output_data)
 
-    sum_data = get_summary_data(output_dataframe)
+    sum_data = tl.get_summary_data(output_dataframe)
 
-    write_data_to_file([output_dataframe, sum_data], zipcode)
+    tl.write_data_to_file([output_dataframe, sum_data], zipcode)
