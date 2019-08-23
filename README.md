@@ -1,4 +1,4 @@
-# trulia_data_scraper
+# Trulia Data Scraper
 Scrape data from trulia.com using selenium and python
 
 WARNING: Use this code at your own risk, scraping is against Trulia's TOC
