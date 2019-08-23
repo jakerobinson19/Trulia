@@ -4,7 +4,9 @@ Scrape data from trulia.com using selenium and python
 WARNING: Use this code at your own risk, scraping is against Trulia's TOC
 -------------------------------------------------------------------------
 
-Basic tool for scraping current home listings from Trulia, written in Python using Selenium. The code takes as input a list of zipcodes and whether to browse listing to buy, rent, or those that have been recently sold on Trulia. It creates 5 variables on each home listing, saves them to a dataframe, and then writes the df to a excel file, with a separate sheet for each zipcode, that gets saved to your working directory. There is also 
+Basic tool for scraping current home listings from Trulia, written in Python using Selenium. The code takes as input a list of zipcodes and whether to browse listing to buy, rent, or those that have been recently sold on Trulia. It creates 5 variables on each home listing, saves them to a dataframe, and then writes the df to a excel file, with a separate sheet for each zipcode, that gets saved to your working directory. The program also generates summary data which can be configured to show averages or min/max, its defaulted to show the min/max and mean of sqft and price grouped by the bedrooms and bathrooms (as shown below).
+
+There are two files, trulia_scraper.py and trulia_functions.py. Clone this repo to your working directory, open the scraper file and step through the code line-by-line. The trulia functions are sourced at the top of the runfile.
 
 Some things to keep in mind:
 ----------------------------
