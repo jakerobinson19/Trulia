@@ -92,24 +92,35 @@ def go_to_next_page(browser):
     except:
       print("Unable to get next page - abort")
 
-def get_summary_data(data):
-  #set studios to bedrooms = 0
-  data.loc[data['Bedrooms'] == 'Studio', 'Bedrooms'] = 0
+'''Format data to allow for dataframe conversion and arithmetic'''
+def clean_data(data):
   
-  #formatting data to allow aggregation
+  #set studios to 0 bedrooms
+  data.loc[data['Bedrooms'] == 'Studio', 'Bedrooms'] = 0
   data['Bedrooms'] = data.Bedrooms.astype(int)
   data['Bathrooms'] = data.Bathrooms.astype(float)
   data['Sqft'] = data.Sqft.str.replace(',','').astype(int)
   data['Price'] = data.Price.str.replace('$','')
   data['Price'] = data.Price.str.replace(',','').astype(int)
-  
+
+  return(data)
+
+def get_price_per_sqft(price, sqft):
+  p = price.replace('$','')
+  p = int(p.replace(',',''))
+
+  ppersq = round(p/(int(sqft.replace(',',''))),2)
+
+  return(ppersq)     
+      
+def get_summary_data(data):
 
   sum_data = data.groupby(['Bedrooms','Bathrooms']).agg({'Sqft':['min','max'], 'Price':['min','max','mean']})
 
   return(sum_data)      
       
 def create_output_dataframe(output_data):
-  columns = ["Address", "Bedrooms", "Bathrooms", "Sqft", "Price"]
+  columns = ["Address", "Bedrooms", "Bathrooms", "Sqft", "Price", "$/sq"]
   output_dataframe = pd.DataFrame(output_data, columns = columns).drop_duplicates()
 
   return(output_dataframe)
