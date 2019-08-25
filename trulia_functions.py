@@ -27,11 +27,15 @@ xpath = {
 def go_to_trulia(browser):
   browser.get('https://www.trulia.com/')
 
-def go_to_trulia_url(browser, type, zipcode):
+def go_to_trulia_url(browser, type, zipcode, city = None, state = None):
   if type == 'buy':
-    city = input("What city is {} in? ".format(zipcode))
-    state = input("What state is {} in? ".format(zipcode))
-    browser.get('https://www.trulia.com/{}/{}/{}/'.format(state,city,zipcode))
+    if city and state:
+      browser.get('https://www.trulia.com/{}/{}/{}/'.format(state,city,zipcode))
+
+    else:
+      city = input("What city is {} in? ".format(zipcode))
+      state = input("What state is {} in? ".format(zipcode))
+      browser.get('https://www.trulia.com/{}/{}/{}/'.format(state,city,zipcode))
 
   elif type == 'rent':
     browser.get('https://www.trulia.com/for_rent/'+ zipcode +'_zip/')
@@ -119,6 +123,14 @@ def clean_data(data):
 
   return(data)
 
+def validate_data(data):
+
+  for item in data:
+    if item == 0 or item is None:
+      return(True)
+
+  return(False)
+
 def get_price_per_sqft(price, sqft):
   p = price.replace('$','')
   p = int(p.replace(',',''))
@@ -160,7 +172,6 @@ def get_captcha(browser):
           return(False)
 
       except:
-
         return(False)
 
 def check_for_captcha(browser):
