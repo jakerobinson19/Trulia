@@ -4,17 +4,16 @@ from selenium import webdriver
 import trulia_functions as tl
 
 if __name__=='__main__':
-
   zips = ['85017','85259','85281','85282','85033','85015','85258','85021','85020']
+  city, state = 'Phoenix', 'AZ'
+  #listing_type: options are 'rent' 'buy' or 'sold'
+  listing_type = 'buy'
+  
   full_data = []
 
   browser = webdriver.Chrome()
 
   tl.go_to_trulia(browser)
-
-  pages = tl.get_number_of_pages(browser)
-  print("{} pages".format(pages))
-  loop = 1
 
   for zipcode in zips:
     output_data = []
@@ -28,70 +27,84 @@ if __name__=='__main__':
     pages = tl.get_number_of_pages(browser)
     print("{} pages".format(pages))
 
-    for n in  range(pages):
+    for pg in range(pages):
       time.sleep(5)
       search_results = tl.get_listings(browser)
 
       print("{} Listings from this page".format(len(search_results)))
 
       for listing in search_results:
+        info = dict.fromkeys(["price","bds","bas","sqft"], None)
+        
         try:
           listing = listing.text
 
           listing = listing.split('\n')
           
-          listing.pop(-2)
+          if listing_type == 'rent':
+            i = -2
+          else:
+            i = -1
+            
+          try:
+            #remove the city, state, and address elements after assigning the address
+            #elements are removed to avoid issues for later logic if they contain 'bd' or 'ba' 
+            listing.pop(i)
+            address = l[i]
+            listing.pop(i)
 
-          address = listing[-2]
-          listing.pop(-2)
+          except IndexError:
+            continue
 
           abort = False
 
+          #loop through listing details and assign values for price, bds, bas, and sqft
           for item in listing:
+            #price
             if '$' in item:
-              price = item.rstrip('/mo')
+              info['price'] = item.rstrip('/mo')
             
+            #bedrooms
             elif 'bd' in item or 'Studio' in item:
+              #ignore listings with ranges (most likely apt complexes)
               if '-' in item:
                 abort = True
                 break
               
               elif 'Studio' in item:
-                bds = 0
+                info['bds'] = 0
               
               else:
-                bds = item.rstrip('bd')
+                info['bds'] = item.rstrip('bd')
             
+            #bathrooms
             elif 'ba' in item:
-              bas = item.rstrip('ba')
+              info['bas'] = item.rstrip('ba')
            
+            #square footage
             elif 'sqft' in item:
-              sqft = item.rstrip(' sqft')
+              info['sqft'] = item.rstrip(' sqft')
             
-          if address == 0 or bds == 10 or bas == 0 or sqft == 0 or price == 0:
-            abort = True
+          abort = tl.validate_data(info.values())
 
-          if abort == True:
+          if abort:
             continue
          
           else:
-            price_per_sqft = tl.get_price_per_sqft(price,sqft)
+            price_per_sqft = tl.get_price_per_sqft(info['price'],info['sqft'])
 
-            output_data.append([address,bds,bas,sqft,price,price_per_sqft])
-            address = 0
-            bds = 10
-            bas = 0
-            sqft = 0
-            price = 0
+            output_data.append([info.values(), price_per_sqft])
+          #end loop assigning values for the listing
 
         except Exception as e:
           print("Something went wrong: {}".format(e))
           continue
+        #end loop through page listings
 
       tl.go_to_next_page(browser)
 
       tl.check_for_captcha(browser)
-    #end of main function loop
+    #end loop through pages
 
     output_dataframe = tl.create_output_dataframe(output_data)
 
@@ -100,3 +113,5 @@ if __name__=='__main__':
     full_data.append([output_dataframe, sum_data])
 
     tl.write_data_to_file(full_data, zips)
+  #end loop through zipcodes
+#end main
