@@ -1,6 +1,4 @@
 import trulia_functions as tl
-from trulia_functions import go_to_next_page
-from trulia_functions import write_data_to_file
 
 import time
 
