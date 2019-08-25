@@ -12,14 +12,32 @@ import pandas as pd
 from pandas import ExcelWriter
 import numpy as np
 
-xpath {
-  'listing_cards':'//*[@class="xsCol12Landscape smlCol12 lrgCol8"]'
+xpath = {
+  'listing_cards':'//*[@class="xsCol12Landscape smlCol12 lrgCol8"]',
+  'listing_cards2':'//div[@class="Grid__CellBox-sc-144isrp-0 SearchResultsList__WideCell-sc-183kqex-3 hxSIvC"]',
+  'pages':'//li[@data-testid="pagination-page-link"]',
+  'pages2':'//a[@class="pvl phm"]',
+  'next_page':'//i[@class="iconRightOpen"]',
+  'next_page2':'//li[@data-testid="pagination-next-page"]',
+  'captcha':'/html/body/section/div[2]/div/h1'
 }
 
 
 def go_to_trulia(browser):
   browser.get('https://www.trulia.com/')
 
+def go_to_trulia_url(browser, type, zipcode):
+  if type == 'buy':
+    city = input("What city is {} in? ".format(zipcode))
+    state = input("What state is {} in? ".format(zipcode))
+    browser.get('https://www.trulia.com/{}/{}/{}/'.format(state,city,zipcode))
+
+  elif type == 'rent':
+    browser.get('https://www.trulia.com/for_rent/'+ zipcode +'_zip/')
+
+  elif type == 'sold':
+    browser.get('https://www.trulia.com/sold/'+zipcode+'_zip/')  
+  
 def get_current_url(browser):
     """ Get URL of the loaded webpage """
     try:
