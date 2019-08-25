@@ -7,7 +7,8 @@ import time
 if __name__=='__main__':
 
   zips = ['28215','28227','28213','28212','28210','28208','28205','28105','28269']
-
+  full_data = []
+  
   browser = webdriver.Chrome()
 
   tl.go_to_trulia(browser)
@@ -118,4 +119,5 @@ if __name__=='__main__':
 
     sum_data = tl.get_summary_data(output_dataframe)
 
-    tl.write_data_to_file([output_dataframe, sum_data], zipcode)
+    full_data.append([output_dataframe, sum_data])
+    tl.write_data_to_file(full_data, zips)
