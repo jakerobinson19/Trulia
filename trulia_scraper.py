@@ -1,6 +1,7 @@
-import trulia_functions as tl
-
 import time
+from selenium import webdriver
+
+import trulia_functions as tl
 
 if __name__=='__main__':
 
@@ -10,15 +11,7 @@ if __name__=='__main__':
   browser = webdriver.Chrome()
 
   tl.go_to_trulia(browser)
-
-  zipcode = input("Enter the zipcode you would like to scrape data for: ")
-
-  #inp = input("Do you wish to continue with scraping? ")
-
-  pages = tl.get_number_of_pages(browser)
-  print("{} pages".format(pages))
-  loop = 1
-
+  
   for zipcode in zips:
     output_data = []
     captcha = tl.check_for_captcha(browser)
@@ -31,7 +24,7 @@ if __name__=='__main__':
           #if captcha:
           break
 
-    browser.get('https://www.trulia.com/for_rent/'+ zipcode +'_zip/')
+    tl.go_to_trulia_url(browser,'rent',zipcode)
 
     captcha = tl.check_for_captcha(browser)
 
@@ -94,7 +87,10 @@ if __name__=='__main__':
             price = 0
 
         except Exception as e:
-          print("Something went wrong: {}".format(e))
+          if 'index out of range' in e:
+            continue
+          else:
+            print("Something went wrong: {}".format(e))
           continue
 
       loop += 1
