@@ -5,71 +5,66 @@ import trulia_functions as tl
 
 if __name__=='__main__':
 
-  zips = ['28215','28227','28213','28212','28210','28208','28205','28105','28269']
+  zips = ['85017','85259','85281','85282','85033','85015','85258','85021','85020']
   full_data = []
-  
+
   browser = webdriver.Chrome()
 
   tl.go_to_trulia(browser)
-  
+
+  pages = tl.get_number_of_pages(browser)
+  print("{} pages".format(pages))
+  loop = 1
+
   for zipcode in zips:
     output_data = []
-    captcha = tl.check_for_captcha(browser)
-
-    if captcha:
-      while True:
-        resume = input("Enter 'y' once you have completed the captcha: ")
-        if resume == 'y':
-          #captcha = check_for_captcha(browser)
-          #if captcha:
-          break
+    
+    tl.check_for_captcha(browser)
 
     tl.go_to_trulia_url(browser,'rent',zipcode)
 
-    captcha = tl.check_for_captcha(browser)
-
-    if captcha:
-      while True:
-        resume = input("Enter 'y' once you have completed the captcha: ")
-        if resume == 'y':
-          #captcha = check_for_captcha(browser)
-          #if captcha:
-          break
+    tl.check_for_captcha(browser)
 
     pages = tl.get_number_of_pages(browser)
     print("{} pages".format(pages))
-    loop = 1
 
-    while loop <= pages:
+    for n in  range(pages):
       time.sleep(5)
-      listings = tl.get_listings(browser)
+      search_results = tl.get_listings(browser)
 
-      print("{} Listings from this page".format(len(listings)))
+      print("{} Listings from this page".format(len(search_results)))
 
-      for l in listings:
+      for listing in search_results:
         try:
-          l = l.text
+          listing = listing.text
 
-          l = l.split('\n')
+          listing = listing.split('\n')
           
-          address = l[-3]
-          l.pop(-3)
+          listing.pop(-2)
+
+          address = listing[-2]
+          listing.pop(-2)
 
           abort = False
 
-          for item in l:
+          for item in listing:
             if '$' in item:
               price = item.rstrip('/mo')
+            
             elif 'bd' in item or 'Studio' in item:
               if '-' in item:
                 abort = True
                 break
+              
               elif 'Studio' in item:
                 bds = 0
+              
               else:
                 bds = item.rstrip('bd')
+            
             elif 'ba' in item:
               bas = item.rstrip('ba')
+           
             elif 'sqft' in item:
               sqft = item.rstrip(' sqft')
             
@@ -78,8 +73,11 @@ if __name__=='__main__':
 
           if abort == True:
             continue
+         
           else:
-            output_data.append([address,bds,bas,sqft,price])
+            price_per_sqft = tl.get_price_per_sqft(price,sqft)
+
+            output_data.append([address,bds,bas,sqft,price,price_per_sqft])
             address = 0
             bds = 10
             bas = 0
@@ -87,31 +85,18 @@ if __name__=='__main__':
             price = 0
 
         except Exception as e:
-          if 'index out of range' in e:
-            continue
-          else:
-            print("Something went wrong: {}".format(e))
+          print("Something went wrong: {}".format(e))
           continue
 
-      loop += 1
       tl.go_to_next_page(browser)
 
-      captcha = tl.check_for_captcha(browser)
-
-      if captcha:
-        while True:
-          resume = input("Enter 'y' once you have completed the captcha: ")
-          if resume == 'y':
-            #captcha = check_for_captcha(browser)
-            #if captcha:
-            break
-
-
-    #print(output_data)
+      tl.check_for_captcha(browser)
+    #end of main function loop
 
     output_dataframe = tl.create_output_dataframe(output_data)
 
-    sum_data = tl.get_summary_data(output_dataframe)
+    sum_data = tl.get_summary_data(clean_data(output_dataframe))
 
     full_data.append([output_dataframe, sum_data])
+
     tl.write_data_to_file(full_data, zips)
