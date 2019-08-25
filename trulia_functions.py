@@ -150,14 +150,15 @@ def check_for_captcha(browser):
       
 #def recursive captcha check
 
-def write_data_to_file(list_dfs, zipcode):
-    file_name = 'Rents_'+ zipcode + '.xlsx'
-    xls_path = '/Users/admin/Desktop/trulia_scraper/' + file_name
+def write_data_to_file(list_dfs, zipcodes):
+    file_name = 'Listings_'+ str(date.today()) + '.xlsx'
+    xls_path = '/Users/jakerobinson/Desktop/trulia_scraper/' + file_name
 
     with ExcelWriter(xls_path) as writer:
-        for n, df in enumerate(list_dfs):
-            if n == 0:
-              df.to_excel(writer, 'Rents - ' + zipcode)
-            if n == 1:
-              df.to_excel(writer, 'Summary - ' + zipcode)
+        for m, data in enumerate(list_dfs):
+            for n, df in enumerate(data):
+              if n == 0:
+                df.to_excel(writer, 'Listings - ' + zipcodes[m])
+              if n == 1:
+                df.to_excel(writer, 'Summary - ' + zipcodes[m])
         writer.save()
