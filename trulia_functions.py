@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,8 +25,20 @@ xpath = {
 }
 
 
+def init_driver(file_path):
+  # Start browser in incognito mode to prevent cookies and disabled infobars
+  options = webdriver.ChromeOptions()
+  options.add_argument("incognito")
+  options.add_argument("disable-infobars")
+  driver = webdriver.Chrome(executable_path=file_path, 
+                              chrome_options=options)
+  driver.wait = WebDriverWait(driver, 10)
+  return(driver)
+
 def go_to_trulia(browser):
   browser.get('https://www.trulia.com/')
+
+  check_for_captcha(browser)
 
 def go_to_trulia_url(browser, type, zipcode, city = None, state = None):
   if type == 'buy':
@@ -42,6 +55,24 @@ def go_to_trulia_url(browser, type, zipcode, city = None, state = None):
 
   elif type == 'sold':
     browser.get('https://www.trulia.com/sold/'+zipcode+'_zip/')
+
+  check_for_captcha(browser)
+
+def go_to_next_page(browser):
+  try:
+    nextp = WebDriverWait(browser, 10).until(
+            EC.visibility_of_element_located((By.XPATH, xpath['next_page'])))
+    nextp.click()
+  
+  except (NoSuchElementException, TimeoutException):
+    try:
+      nextp = WebDriverWait(browser, 10).until(
+              EC.visibility_of_element_located((By.XPATH, xpath['next_page2'])))
+      nextp.click()
+    except:
+      print("Unable to get next page - abort")
+
+  check_for_captcha(browser)
 
 def get_current_url(browser):
     """ Get URL of the loaded webpage """
@@ -99,20 +130,6 @@ def get_number_of_pages(browser):
 
   return(pages_num)
 
-def go_to_next_page(browser):
-  try:
-    nextp = WebDriverWait(browser, 10).until(
-            EC.visibility_of_element_located((By.XPATH, xpath['next_page'])))
-    nextp.click()
-  
-  except (NoSuchElementException, TimeoutException):
-    try:
-      nextp = WebDriverWait(browser, 10).until(
-              EC.visibility_of_element_located((By.XPATH, xpath['next_page2'])))
-      nextp.click()
-    except:
-      print("Unable to get next page - abort")
-
 def clean_data(data):
   data.loc[data['Bedrooms'] == 'Studio', 'Bedrooms'] = 0
   data['Bedrooms'] = data.Bedrooms.astype(int)
@@ -124,9 +141,9 @@ def clean_data(data):
   return(data)
 
 def validate_data(data):
-
+  # Ignore data with invalid data and ranges (most likely apt complexes)
   for item in data:
-    if item == 0 or item is None:
+    if item == 0 or item is None or '-' in item:
       return(True)
 
   return(False)
