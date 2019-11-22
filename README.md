@@ -10,8 +10,8 @@ There are two files, trulia_scraper.py and trulia_functions.py. Clone this repo 
 
 Some things to keep in mind:
 ----------------------------
-* You will need to edit the input parameter of function init_driver within zillow_runfile.py to point to the local path of your web driver program (required by Selenium).
-* Zillow will periodically throw up a CAPTCHA page. The script is designed to pause scraping indefinitely until the user has manually completed the CAPTCHA requirements (at which point it should resume scraping).
+* You will need to edit the input parameter of function init_driver within trulia_scraper.py to point to the local path of your web driver program (required by Selenium).
+* Trulia will periodically throw up a CAPTCHA page. The script is designed to pause scraping indefinitely until the user has manually completed the CAPTCHA requirements (at which point it should resume scraping).
 
 Software Requirements/Info
 --------------------------
