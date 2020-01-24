@@ -14,6 +14,9 @@ import pandas as pd
 from pandas import ExcelWriter
 import numpy as np
 
+# old xpaths
+# listing_cards2':'//div[@class="Grid__CellBox-sc-144isrp-0 SearchResultsList__WideCell-sc-183kqex-3 hxSIvC"] [Dead Dec 2019]
+
 xpath = {
   'listing_cards':'//*[@class="xsCol12Landscape smlCol12 lrgCol8"]',
   'listing_cards2':'//div[@class="Grid__CellBox-sc-144isrp-0 SearchResultsList__WideCell-sc-183kqex-3 hxSIvC"]',
