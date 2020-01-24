@@ -120,8 +120,11 @@ for zipcode in zips:
         print("Something went wrong: {}".format(e))
         continue
       #end loop through page listings
-
-    tl.go_to_next_page(browser)
+      
+    if pg == pages - 1:
+      break
+    else:
+      tl.go_to_next_page(browser)
   #end loop through pages
 
   output_dataframe = tl.create_output_dataframe(output_data)
