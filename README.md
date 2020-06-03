@@ -20,6 +20,21 @@ Software Requirements/Info
 - The Selenium package requires a webdriver program. This code was written 
 using [Chromedriver](https://chromedriver.storage.googleapis.com/index.html?path=76.0.3809.126/) v76.0.3809.
 
+Usage
+----------------------------
+In trulia_scraper.py configure the zipcodes and types of properties you wish to scrap for ('buy' or 'rent') and save it.
+```sh
+zips = ['85017','85259','85281','85282','85033','85015','85258','85021','85020']
+
+# Specify the listing type 
+listing_type = 'buy'
+```
+Run the program from the command line:
+```sh
+python3 trulia_scraper.py
+```
+* Note: This will bring up a browser where selenium with scrape from trulia.com. You will have to solve captchas and tell the program to resume each time a captcha interrupts the process (which is hopefully not too often)
+
 Example of the output dataframe
 -------------------------------
 
